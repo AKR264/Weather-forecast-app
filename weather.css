@@ -1,0 +1,94 @@
+h1{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 34px;
+}
+h4{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+.app{
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    width: 450px;
+}
+.app:hover {
+    transform: scale(1.05);
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to top, #48D1CC, #191970);
+}
+#cityname {
+    padding: 15px;
+    margin: 10px 0;
+    width: 70%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#cityname:focus {
+    outline: none;
+    border-color: #2196F3;
+}
+
+#cityname::placeholder {
+    color: #aaa;
+}
+
+#cityname-btn{
+    padding: 10px;
+    background-color: #2196F3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#cityname-btn:hover{
+    background-color: #1565C0;
+}
+
+#result{
+    display: none;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+#city{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#weather-icon{
+    width: 100px;
+    height: 100px;
+}
+
+#temperature{
+    font-size: 24px;
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+#info{
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#wind_speed{
+    font-size: 16px;
+    color: rgb(255, 0, 0);
+}
+
+#date_time{
+    font-size: 14px;
+    color: rgb(255, 0, 0);
+}
