@@ -1,38 +1,83 @@
 const url = 'https://api.openweathermap.org/data/2.5/weather';
 const apiKey = 'f00c38e0279b7bc85480c3fe775d518c';
 
-$(document).ready(function () {
-	weatherFn('Rajsamand');
+document.addEventListener("DOMContentLoaded", () => {
+  weatherFn('Rajsamand');
+
+  document.getElementById("cityname-btn").addEventListener("click", () => {
+    const city = document.getElementById("cityname").value.trim();
+    if (city !== "") {
+      weatherFn(city);
+    }
+  });
 });
 
-async function weatherFn(cName) {
-	const temp =
-		`${url}?q=${cName}&appid=${apiKey}&units=metric`;
-	try {
-		const res = await fetch(temp);
-		const data = await res.json();
-		if (res.ok) {
-			weatherShowFn(data);
-		} else {
-			alert('City not found. Please try again.');
-		}
-	} catch (error) {
-		console.error('Error fetching weather data:', error);
-	}
+async function weatherFn(cityName) {
+  const requestUrl = `${url}?q=${cityName}&appid=${apiKey}&units=metric`;
+
+  try {
+    const response = await fetch(requestUrl);
+    const data = await response.json();
+
+    if (response.ok) {
+      weatherShowFn(data);
+    } else {
+      alert('City not found. Please try again.');
+    }
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+  }
+}
+
+function formatLocalTime(utcOffsetInSeconds) {
+  const now = new Date();
+  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  const localTime = new Date(utc + utcOffsetInSeconds * 1000);
+  return localTime.toLocaleString('en-US', {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true
+  });
 }
 
 function weatherShowFn(data) {
-	$('#city').text(data.name);
-	$('#date_time').text(moment().
-		format('MMMM Do YYYY, h:mm:ss a'));
-	$('#temperature').
-		html(`${data.main.temp}°C`);
-	$('#info').
-		text(data.weather[0].description);
-	$('#wind_speed').
-		html(`Wind Speed: ${data.wind.speed} m/s`);
-	$('#weather-icon').
-	    attr('src',
-		`http://openweathermap.org/img/w/${data.weather[0].icon}.png`);
-	$('#result').fadeIn();
+  document.getElementById("city").textContent = data.name;
+  document.getElementById("date_time").textContent = formatLocalTime(data.timezone);
+  document.getElementById("temperature").innerHTML = `${data.main.temp}°C`;
+  document.getElementById("info").textContent = data.weather[0].description;
+  document.getElementById("wind_speed").innerHTML = `Wind Speed: ${data.wind.speed} m/s`;
+  document.getElementById("weather-icon").src = `http://openweathermap.org/img/w/${data.weather[0].icon}.png`;
+  document.getElementById("result").style.display = "block";
+
+  setBackground(data.weather[0].main, data.dt, data.timezone);
+}
+
+function setBackground(weatherMain, timestamp, timezoneOffset) {
+  const hour = new Date((timestamp + timezoneOffset) * 1000).getHours();
+  const isDay = hour >= 6 && hour < 18;
+
+  const weather = weatherMain.toLowerCase();
+  const timeOfDay = isDay ? 'day' : 'night';
+  const className = `${weather}-${timeOfDay}`;
+
+  clearWeatherBackground();
+  document.body.classList.add(className);
+}
+
+function clearWeatherBackground() {
+  const weatherClasses = [
+    "clear-day", "clear-night",
+    "clouds-day", "clouds-night",
+    "rain-day", "rain-night",
+    "drizzle-day", "drizzle-night",
+    "snow-day", "snow-night",
+    "thunderstorm-day", "thunderstorm-night"
+  ];
+
+  weatherClasses.forEach(cls => document.body.classList.remove(cls));
 }
